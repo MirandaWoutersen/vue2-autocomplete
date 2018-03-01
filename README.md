@@ -182,9 +182,6 @@ Number of milliseconds the user should stop typing for before the request is sen
 #### process (Function)
 Function to process the API result with. Should return an array of entries or an object whose properties can be enumerated.
 
-#### template (Function)
-Function to process each result with. Takes the type of an API reply element and should return HTML data.
-
 
 ## Callback Events
 You can make a callback event via props.
