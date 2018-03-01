@@ -182,6 +182,9 @@ Number of milliseconds the user should stop typing for before the request is sen
 #### process (Function)
 Function to process the API result with. Should return an array of entries or an object whose properties can be enumerated.
 
+#### customParams (Object)
+Object of key value pairs to be send along with the request as query parameters.
+
 
 ## Callback Events
 You can make a callback event via props.
