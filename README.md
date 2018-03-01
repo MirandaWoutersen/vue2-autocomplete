@@ -171,7 +171,7 @@ Placeholder for input
 Custom class name for autocomplete component
 
 #### classes (Object)
-Spesific custom class for each part. available: wrapper, input, list, and item
+Specific custom class for each part. available: wrapper, input, list
 
 #### id (String)
 Custom id name for autocomplete component
