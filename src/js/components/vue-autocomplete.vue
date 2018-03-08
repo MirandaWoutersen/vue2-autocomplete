@@ -330,14 +330,21 @@
       =============================*/
 
       composeParams(val) {
-        const encode = (val) => this.encodeParams ? encodeURIComponent(val) : val
-        let params = `${this.param}=${encode(val)}`
-        if(this.customParams) {
-          Object.keys(this.customParams).forEach((key) => {
-            params += `&${key}=${encode(this.customParams[key])}`
-          })
-        }
-        return params
+        const encode = (val) => this.encodeParams ? encodeURIComponent(val) : val,
+              params = Object.assign({
+                [this.param]: encode(val)
+              }, (this.customParams || {}));
+
+        return this.objectPaths(params).map(path => {
+          const val   = this.objectPath(params, path.slice(0)),
+                first = encode(path.shift()),
+                parts = (0 < path.length) ? path.map(part => `[${encode(part)}]`) : [],
+                key   = [first].concat(parts).join('');
+
+          return (Array.isArray(val))
+            ? val.map(v => [`${key}[]`, encode(v)].join('=')).join('&')
+            : [key, encode(val)].join('=');
+        }).join('&');
       },
 
       composeHeader(ajax) {
@@ -387,6 +394,32 @@
             this.json = options
           })
         }
+      },
+
+      /*==============================
+        HELPERS
+      =============================*/
+
+      isObject(value){
+        return ('[object Object]' === toString.call(value));
+      },
+
+      objectPaths(obj, parent = []){
+        return Object
+          .keys(obj)
+          .reduce((acc, key) => {
+            const val  = obj[key],
+                  path = (this.isObject(val)) ? paths(val, parent.concat(key)) : [parent.concat(key)];
+
+            return acc.concat(path);
+          }, []);
+      },
+
+      objectPath(obj, path){
+        const key = path.shift(),
+              val = obj[key];
+
+        return (0 < path.length) ? this.objectPath(val, path) : val;
       },
 
     },
