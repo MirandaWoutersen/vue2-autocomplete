@@ -89,7 +89,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_vue_autocomplete_vue__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e47ae2be_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_vue_autocomplete_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_781d22d2_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_vue_autocomplete_vue__ = __webpack_require__(4);
 var disposed = false
 var normalizeComponent = __webpack_require__(3)
 /* script */
@@ -104,7 +104,7 @@ var __vue_scopeId__ = null
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
   __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_vue_autocomplete_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_e47ae2be_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_vue_autocomplete_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_781d22d2_hasScoped_false_node_modules_vue_loader_lib_selector_type_template_index_0_vue_autocomplete_vue__["a" /* default */],
   __vue_styles__,
   __vue_scopeId__,
   __vue_module_identifier__
@@ -120,9 +120,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-e47ae2be", Component.options)
+    hotAPI.createRecord("data-v-781d22d2", Component.options)
   } else {
-    hotAPI.reload("data-v-e47ae2be", Component.options)
+    hotAPI.reload("data-v-781d22d2", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -137,6 +137,8 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -474,14 +476,21 @@ if (false) {(function () {
 
       var encode = function encode(val) {
         return _this3.encodeParams ? encodeURIComponent(val) : val;
-      };
-      var params = this.param + "=" + encode(val);
-      if (this.customParams) {
-        Object.keys(this.customParams).forEach(function (key) {
-          params += "&" + key + "=" + encode(_this3.customParams[key]);
-        });
-      }
-      return params;
+      },
+          params = Object.assign(_defineProperty({}, this.param, encode(val)), this.customParams || {});
+
+      return this.objectPaths(params).map(function (path) {
+        var val = _this3.objectPath(params, path.slice(0)),
+            first = encode(path.shift()),
+            parts = 0 < path.length ? path.map(function (part) {
+          return "[" + encode(part) + "]";
+        }) : [],
+            key = [first].concat(parts).join('');
+
+        return Array.isArray(val) ? val.map(function (v) {
+          return [key + "[]", encode(v)].join('=');
+        }).join('&') : [key, encode(val)].join('=');
+      }).join('&');
     },
     composeHeader: function composeHeader(ajax) {
       var _this4 = this;
@@ -535,6 +544,33 @@ if (false) {(function () {
           _this6.json = options;
         });
       }
+    },
+
+
+    /*==============================
+      HELPERS
+    =============================*/
+
+    isObject: function isObject(value) {
+      return '[object Object]' === toString.call(value);
+    },
+    objectPaths: function objectPaths(obj) {
+      var _this7 = this;
+
+      var parent = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+      return Object.keys(obj).reduce(function (acc, key) {
+        var val = obj[key],
+            path = _this7.isObject(val) ? paths(val, parent.concat(key)) : [parent.concat(key)];
+
+        return acc.concat(path);
+      }, []);
+    },
+    objectPath: function objectPath(obj, path) {
+      var key = path.shift(),
+          val = obj[key];
+
+      return 0 < path.length ? this.objectPath(val, path) : val;
     }
   },
 
@@ -733,7 +769,7 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-e47ae2be", esExports)
+     require("vue-hot-reload-api").rerender("data-v-781d22d2", esExports)
   }
 }
 
